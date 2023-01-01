@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'class tests' }
-AOC2015Day01Test >> testStar1 [
+AOC2015Day01Test >> testStar1WithInput [
 
 	"test that star1WithInput correctly tells me the floor I am currently on after evaluating the input string.
 	
@@ -30,7 +30,7 @@ AOC2015Day01Test >> testStar1 [
 ]
 
 { #category : #'class tests' }
-AOC2015Day01Test >> testStar2 [
+AOC2015Day01Test >> testStar2WithInput [
 
 	"Test that star2WithInput correctly finds the position of the first character in the input string that caused Santa to enter the basement (floor -1).
 	

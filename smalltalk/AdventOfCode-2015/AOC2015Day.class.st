@@ -29,37 +29,54 @@ AOC2015Day class >> createDay: dayNumber [
 	                  , 'Test') asSymbol.
 
 	"Create Day class"
-	self
-		subclass: className
-		instanceVariableNames: ''
-		classVariableNames: 'INPUT'
-		package: 'AdventOfCode-2015-Solutions'.
+	class := (self
+		          subclass: className
+		          instanceVariableNames: ''
+		          classVariableNames: 'INPUT'
+		          package: 'AdventOfCode-2015-Solutions') class.
 
 	"Create test class"
-	TestCase
-		subclass: testClassName
-		instanceVariableNames: ''
-		classVariableNames: ''
-		package: 'AdventOfCode-2015-Tests-Solutions'.
+	testClass := (TestCase
+		              subclass: testClassName
+		              instanceVariableNames: ''
+		              classVariableNames: ''
+		              package: 'AdventOfCode-2015-Tests-Solutions') class.
 
-	class := (Smalltalk at: className) class.
+	class compile: 'initialize
+	
+	    INPUT := '''' "Official submission input."'
+	    classified: 'class initialization'. 
+
 	class
 		compile: 'star1
-		self flag: #notYetImplemented'
+		
+		"solve for star 1 using pre-supplied input string INPUT"
+		
+		self test1WithInput: INPUT'
+		classified: 'stars'.
+	class
+		compile: 'star1WithInput input
+	   self flag: #notYetImplemented'
 		classified: 'stars'.
 	class
 		compile: 'star2
-		self flag: #notYetImplemented'
+		
+		"invoke for star 2 using pre-supplied input string INPUT"
+		
+		self star2WithInput: INPUT'
+		classified: 'stars'.
+	class
+		compile: 'star2WithInput input
+	   self flag: #notYetImplemented'
 		classified: 'stars'.
 
 	"Define test stubs."
-	testClass := Smalltalk at: testClassName.
 	testClass
-		compile: 'testStar1
+		compile: 'testStarWithInput1
 	    self flag: #notYetImplemented'
 		classified: 'stars'.
 	testClass
-		compile: 'testStar2
+		compile: 'testStarWithInput2
 	    self flag: #notYetImplemented'
 		classified: 'stars'
 ]

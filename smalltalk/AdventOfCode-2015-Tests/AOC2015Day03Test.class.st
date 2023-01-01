@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #stars }
-AOC2015Day03Test >> testStar1 [
+AOC2015Day03Test >> testStar1WithInput [
 
 	self assert: (AOC2015Day03 star1WithInput: '>') equals: 2.
 	self assert: (AOC2015Day03 star1WithInput: '^>v<') equals: 4.
@@ -16,7 +16,7 @@ AOC2015Day03Test >> testStar1 [
 ]
 
 { #category : #stars }
-AOC2015Day03Test >> testStar2 [
+AOC2015Day03Test >> testStar2WithInput [
 
 	self assert: (AOC2015Day03 star2WithInput: '^v') equals: 3.
 	self assert: (AOC2015Day03 star2WithInput: '^>v<') equals: 3.
