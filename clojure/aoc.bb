@@ -1,3 +1,7 @@
 #!/usr/bin/env bb
 
-(println "Hello World!")
+(defn -main [& args]
+  (println "Hello World!") args)
+
+(when (= *file* (System/getProperty "babashka.file"))
+  (apply -main *command-line-args*))
