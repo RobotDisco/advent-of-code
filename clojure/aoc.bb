@@ -26,18 +26,19 @@
         function-name (case star
                         1 'star1
                         2 'star2
-                        nil)]
-    ;; ns-resolve throws an exception if our desired namespace doesn't exist
-    ;; rely on if-let to error out in that case.
-    (if-let [_ (namespace namespace-symbol)]
-      ;; Get the Var mapping to our desired namespace/function combination.
-      (let [resolve-fn (ns-resolve namespace-symbol function-name)]
-        (if resolve-fn
-          ;; Call function if it exists
-          (resolve-fn)
-          ;; Error out if function doesn't exist.
-          (unwritten-star-error year day star)))
-      ;; Error out if namespace doesn't exist.
+                        ;; TODO Should print special message for invalid 3+
+                        ;; star choice.
+                        nil)
+        resolve-fn (try
+                     ;; We need to load our classes, which will throw an
+                     ;; exception if they haven't been defined.
+                     (require namespace-symbol)
+                     (ns-resolve namespace-symbol function-name)
+                     (catch java.lang.Exception _e nil))]
+    (if resolve-fn
+      ;; Call function if it exists
+      (resolve-fn)
+      ;; Error out if function doesn't exist.
       (unwritten-star-error year day star))))
 
 (defn -main [& args]
