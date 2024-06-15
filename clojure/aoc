@@ -1,0 +1,96 @@
+#!/usr/bin/env bb
+;;;; A lot of the code and commentary in this file was built with code
+;;;; assistance from TabNine (tabnine.com).
+
+(require '[babashka.cli :as cli])
+(require '[babashka.fs :as fs])
+
+(defn validate-day?
+  "Advent of Code only runs for 25 days; validate that the day value is between
+  1 and 25, inclusive."
+  [val]
+  (and
+   (pos? val)
+   (<= val 25)))
+
+(defn validate-star?
+  "Advent of Code only produces two star questions per day; validate that our
+  value would be a valid star."
+  [val]
+  (or
+   (= val 1)
+   (= val 2)))
+
+(def cli-spec
+  "Argument spec for running Advent of Code problems."
+  {:year {:desc "Advent of Code Year (2015-)"
+          :require true}
+   :day {:desc "Advent of Code Day (1-25)"
+         :validate validate-day?
+         :require true}
+   :star {:desc "Advent of Code Star (1-2)"
+          :validate validate-star?
+          :require true}})
+
+(defn usage
+  "Usage summary"
+  [_]
+  (println
+   (str "run\n" (cli/format-opts {:spec cli-spec}))))
+
+(defn year-day-file-exists?
+  "Does file exist for requested AOC Year/Day?"
+  [year day]
+  (let [filename (format "./src/aoc/year%d/day%02d.clj" year day)]
+    (fs/exists? filename)))
+
+(defn unwritten-star-error
+  "Error message about undefined star function and exit."
+  [year day star]
+  (format "ERROR: We haven't defined a solution for Year %d, Day %d, Star %d.
+
+Please define a 0-arity function defined as aoc.year%d.day%02d/star%d"
+          year day star year day star))
+
+(defn resolve-fn
+  "This function takes three integer arguments: 'year', 'day', and 'star'.
+
+  It dynamically loads a predictably-named namespace and function for a given
+  year/day/star. If the function exists, return its var. If the function or
+  namespace does return nil."
+  [year day star]
+  ;; Generate symbols based on the provided year/day/star integer inputs
+  (let [namespace-symbol (symbol (format "aoc.year%d.day%02d" year day))
+        function-name (case star
+                        1 'star1
+                        2 'star2
+                        nil)]
+    (try
+      (require namespace-symbol)
+      (ns-resolve namespace-symbol function-name)
+      (catch java.lang.Exception _
+          nil))))
+
+(defn run
+  "Run the logic that gets us the answer for our specified AOC Star"
+  [{:keys [opts]}]
+  ;; Generate symbols based on the provided year/day/star integer inputs
+  (let [{:keys [year day star]} opts
+        function (resolve-fn year day star)]
+    (if function
+      ;; Call function if it exists
+      (println (function))
+      ;; Error out if function doesn't exist.
+      (println (unwritten-star-error year day star)))))
+
+(def command-table
+  [{:cmds ["run"] :fn run :spec cli-spec}
+   {:cmds [] :fn usage}])
+
+;; By putting our entry point into -main, we allow REPL to call out function
+;; If Babaskha's "babashka.file" property matches *file*, we know that we've
+;; run this file from the shell, so invoke main.
+;;
+;; This is similar to Python's "if __name__ == "__main__" logic.
+(when (= *file* (System/getProperty "babashka.file"))
+  (cli/dispatch command-table *command-line-args*))
