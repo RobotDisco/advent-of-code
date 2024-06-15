@@ -6,20 +6,23 @@
 (require '[babashka.fs :as fs])
 
 (defn validate-day?
-  "Validate AOC Day parameter"
+  "Advent of Code only runs for 25 days; validate that the day value is between
+  1 and 25, inclusive."
   [val]
   (and
    (pos? val)
    (<= val 25)))
 
 (defn validate-star?
-  "Validate AOC Star parameter"
+  "Advent of Code only produces two star questions per day; validate that our
+  value would be a valid star."
   [val]
   (or
    (= val 1)
    (= val 2)))
 
 (def cli-spec
+  "Argument spec for running Advent of Code problems."
   {:year {:desc "Advent of Code Year (2015-)"
           :require true}
    :day {:desc "Advent of Code Day (1-25)"
@@ -42,45 +45,43 @@
     (fs/exists? filename)))
 
 (defn unwritten-star-error
-  "Print error message about undefined star function and exit."
+  "Error message about undefined star function and exit."
   [year day star]
-  ;; Temporarily remap standard error to standard out.
-  (binding [*out* *err*]
-    (println (format "ERROR: We haven't defined a solution for Year %d, Day %d, Star %d.
+  (format "ERROR: We haven't defined a solution for Year %d, Day %d, Star %d.
 
-  Please define a 0-arity function defined as aoc.year%d.day%02d/star%d"
-                     year day star year day star))))
+Please define a 0-arity function defined as aoc.year%d.day%02d/star%d"
+          year day star year day star))
 
-(defn load-and-run
+(defn resolve-fn
   "This function takes three integer arguments: 'year', 'day', and 'star'.
 
-  It constructs a namespace/function name by joining them with hyphens and
-  checks if the function exists in the corresponding namespace.  If the function
-  exists, it evaluates and returns the result.  If the function does not exist,
-  it throws an error."
+  It dynamically loads a predictably-named namespace and function for a given
+  year/day/star. If the function exists, return its var. If the function or
+  namespace does return nil."
   [year day star]
   ;; Generate symbols based on the provided year/day/star integer inputs
-  (let [namespace-symbol (symbol (str "aoc.year" year ".day" (format "%02d"
-                                                                     day)))
+  (let [namespace-symbol (symbol (format "aoc.year%d.day%02d" year day))
         function-name (case star
                         1 'star1
-                        2 'star2)
-        resolve-fn (do
-                     (require namespace-symbol)
-                     (ns-resolve namespace-symbol function-name))]
-    (if resolve-fn
-      ;; Call function if it exists
-      (resolve-fn)
-      ;; Error out if function doesn't exist.
-      (unwritten-star-error year day star))))
+                        2 'star2
+                        nil)]
+    (try
+      (require namespace-symbol)
+      (ns-resolve namespace-symbol function-name)
+      (catch java.lang.Exception _
+          nil))))
 
 (defn run
   "Run the logic that gets us the answer for our specified AOC Star"
   [{:keys [opts]}]
-  (let [{:keys [year day star]} opts]
-    (if (year-day-file-exists? year day)
-      (println (load-and-run year day star))
-      (println (format "ERROR: File doesn't exist for Year %d Day %d" year day)))))
+  ;; Generate symbols based on the provided year/day/star integer inputs
+  (let [{:keys [year day star]} opts
+        function (resolve-fn year day star)]
+    (if function
+      ;; Call function if it exists
+      (println (function))
+      ;; Error out if function doesn't exist.
+      (println (unwritten-star-error year day star)))))
 
 (def command-table
   [{:cmds ["run"] :fn run :spec cli-spec}
