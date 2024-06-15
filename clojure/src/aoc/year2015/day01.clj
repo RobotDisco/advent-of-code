@@ -4,8 +4,39 @@
 
 (defn star1
   []
-  (reduce (fn [acc x] (cond (= \( x) (inc acc) (= \) x) (dec acc))) 0 input))
+  ;; Assuming we start at floor 0, iterate through the string.
+  ;; If we find a \(, increment the floor.
+  ;; If we find a \), decrement the floor.
+  ;; Return the floor we wind up on.
+  (reduce (fn [acc x]
+            (cond (= \( x) (inc acc)
+                  (= \) x) (dec acc)))
+          0
+          input))
 
 (defn star2
   []
-  (count (take-while #(>= % 0) (reduce (fn [acc x] (cond (= \( x) (conj acc (inc (last acc))) (= \) x) (conj acc (dec (last acc))))) [0] input))))
+  ;; Let's do this without producing an output sequence, because all we really
+  ;; care about is the position of the string at the time we switch to a
+  ;; negative floor.
+  ;; We can use loop/recur for this.
+  (loop [;; Generate a sequence view for our input string
+         input (seq input)
+         ;; Start with the 0th character in the string
+         pos 0
+         ;; Start on floor 0
+         floor 0]
+    ;; Are we on a negative floor? Immediately return the current input position.
+    (if (neg? floor)
+      pos
+      (let [char (first input)]
+        (recur
+         ;; Iterate through the rest of the input
+         (rest input)
+         ;; Increase the position counter
+         (inc pos)
+         (cond
+           ;; If we find a \(, increment the floor
+           (= \( char) (inc floor)
+           ;; If we find a \), decrement the floor
+           (= \) char) (dec floor)))))))
