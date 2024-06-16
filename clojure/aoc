@@ -3,7 +3,8 @@
 ;;;; assistance from TabNine (tabnine.com).
 
 (require '[babashka.cli :as cli])
-(require '[babashka.fs :as fs])
+
+(require '[aoc.core :as aoc])
 
 (defn validate-day?
   "Advent of Code only runs for 25 days; validate that the day value is between
@@ -38,18 +39,17 @@
   (println
    (str "run\n" (cli/format-opts {:spec cli-spec}))))
 
-(defn year-day-file-exists?
-  "Does file exist for requested AOC Year/Day?"
-  [year day]
-  (let [filename (format "./src/aoc/year%d/day%02d.clj" year day)]
-    (fs/exists? filename)))
+(defn error
+  "Print error message"
+  [msg]
+  (str "ERROR: " msg))
 
 (defn unwritten-star-error
   "Error message about undefined star function and exit."
   [year day star]
-  (format "ERROR: We haven't defined a solution for Year %d, Day %d, Star %d.
+  (format "We haven't defined a solution for Year %d, Day %d, Star %d.
 
-Please define a 0-arity function defined as aoc.year%d.day%02d/star%d"
+Please define a 1-arity function defined as aoc.year%d.day%02d/star%d"
           year day star year day star))
 
 (defn resolve-fn
@@ -75,13 +75,18 @@ Please define a 0-arity function defined as aoc.year%d.day%02d/star%d"
   "Run the logic that gets us the answer for our specified AOC Star"
   [{:keys [opts]}]
   ;; Generate symbols based on the provided year/day/star integer inputs
-  (let [{:keys [year day star]} opts
-        function (resolve-fn year day star)]
-    (if function
-      ;; Call function if it exists
-      (println (function))
+  (let [{:keys [year day star]} opts]
+    (if-let [function (resolve-fn year day star)]
+      ;; The functions.
+      (let [input (aoc/fetch-input year day)]
+        ;; Did we successfully get back input from the AOC servers?
+        (if-let [data (aoc/data input)]
+          ;; Return the result of the function, passing in the input.
+          (println (function data))
+          ;; Return the error result of fetching the input.
+          (error (aoc/error input))))
       ;; Error out if function doesn't exist.
-      (println (unwritten-star-error year day star)))))
+      (error (unwritten-star-error year day star)))))
 
 (def command-table
   [{:cmds ["run"] :fn run :spec cli-spec}
