@@ -7,5 +7,15 @@
 
 # End of https://www.gitignore.io/api/commonlisp
 
+### Clojure ###
+.clj-kondo
+
+
+### Nix/Direnv ###
+.direnv/
+
+### LSP plugins
+.lsp/
+
 ### No need to keep input files around
 *.txt
