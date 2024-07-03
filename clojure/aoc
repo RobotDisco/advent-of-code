@@ -3,6 +3,7 @@
 ;;;; assistance from TabNine (tabnine.com).
 
 (require '[babashka.cli :as cli])
+(require '[babashka.fs :as fs])
 
 (require '[aoc.core :as aoc])
 
@@ -22,7 +23,7 @@
    (= val 1)
    (= val 2)))
 
-(def cli-spec
+(def run-spec
   "Argument spec for running Advent of Code problems."
   {:year {:desc "Advent of Code Year (2015-)"
           :require true}
@@ -33,11 +34,21 @@
           :validate validate-star?
           :require true}})
 
+(def add-spec
+  "Argument spec for adding new Advent of Code solution files."
+  {:year {:desc "Advent of Code Year (2015-)"
+          :require true}
+   :day {:desc "Advent of Code Day (1-25)"
+         :validate validate-day?
+         :require true}})
+
 (defn usage
   "Usage summary"
   [_]
   (println
-   (str "run\n" (cli/format-opts {:spec cli-spec}))))
+   (str "run\n" (cli/format-opts {:spec run-spec})))
+  (println
+   (str "add\n" (cli/format-opts {:spec add-spec}))))
 
 (defn error
   "Print error message"
@@ -88,8 +99,26 @@ Please define a 1-arity function defined as aoc.year%d.day%02d/star%d"
       ;; Error out if function doesn't exist.
       (error (unwritten-star-error year day star)))))
 
+(defn add
+  ""
+  [{:keys [opts]}]
+  (let [{:keys [year day]} opts
+        filepath (format "src/aoc/year%d/day%02d.clj" year day)]
+    (if (fs/exists? filepath)
+      (do
+        (println "ERR: File" filepath "already exists, aborting.")
+        (System/exit 1))
+      (let [content (str "(ns aoc.year" year ".day" (format "%02d" day) ")\n\n"
+                         "(defn star1 [input]\n"
+                         "	\"Not Implemented\")\n\n"
+                         "(defn star2 [input]\n"
+                         "	\"Not Implemented\")\n")]
+        (spit filepath content)
+        (println "Generated file:" filepath)))))
+
 (def command-table
-  [{:cmds ["run"] :fn run :spec cli-spec}
+  [{:cmds ["run"] :fn run :spec run-spec}
+   {:cmds ["add"] :fn add :spec add-spec}
    {:cmds [] :fn usage}])
 
 ;; By putting our entry point into -main, we allow REPL to call out function

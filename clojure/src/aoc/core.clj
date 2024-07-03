@@ -6,10 +6,15 @@
 (defn load-config
   "Load and parse standard configuration file, returning a structure."
   []
-  (-> "config.edn"
-      io/file
-      slurp
-      edn/read-string))
+  (try
+    (-> "config.edn"
+        io/file
+        slurp
+        edn/read-string)
+    (catch Exception e
+      (println "ERR: Cannot load configuration: "
+               (.getMessage e))
+      (System/exit 1))))
 
 
 (def config
