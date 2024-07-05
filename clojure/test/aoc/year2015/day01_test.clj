@@ -1,5 +1,5 @@
 (ns aoc.year2015.day01-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.test :refer [deftest is]]
             ;; system under test
             [aoc.year2015.day01 :as sut]))
 
