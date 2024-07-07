@@ -108,7 +108,13 @@ Please define a 1-arity function defined as aoc.year%d.day%02d/star%d"
       (do
         (println "ERR: File" filepath "already exists, aborting.")
         (System/exit 1))
-      (let [content (str "(ns aoc.year" year ".day" (format "%02d" day) ")\n\n"
+      (let [content (str ";;;; Solution for Advent of Code"
+                         (format "Year %d Day %02d.\n" year day)
+                         ";;;; See question and examples at "
+                         (format "https://adventofcode.com/%d/day/%d.\n" year day)
+                         ";;;; See your specific input at "
+                         (format "https://adventofcode.com/%d/day/$d/input\n\n" year day)
+                         "(ns aoc.year" year ".day" (format "%02d" day) ")\n\n"
                          "(defn star1 [input]\n"
                          "	\"Not Implemented\")\n\n"
                          "(defn star2 [input]\n"
