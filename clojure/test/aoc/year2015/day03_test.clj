@@ -8,4 +8,7 @@
   (is (= 2 (sut/star1 "^v^v^v^v^v"))))
 
 
-(deftest star2)
+(deftest star2
+  (is (= 3 (sut/star2 "^v")))
+  (is (= 3 (sut/star2 "^>v<")))
+  (is (= 11 (sut/star2 "^v^v^v^v^v"))))

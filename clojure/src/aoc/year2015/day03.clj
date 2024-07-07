@@ -29,8 +29,36 @@
       ;; were given multiple gift deliveries
       prezzies)))
 
+(defn bob2 [input]
+  (loop [prezzies {[0 0] 1}
+         locations {true [0 0] false [0 0]}
+         robosanta false
+         input (seq input)]
+    ;; Do we still have more input to process?
+    (if (seq input)
+      ;; Figure out our next destination based on the input glyph
+      (let
+       [[x y] (locations robosanta)
+        nextloc (case (first input)
+                     ;; West, decrement x coordinate
+                  \< [(dec x) y]
+                     ;; East, increment x coordinate
+                  \> [(inc x) y]
+                     ;; North, increment y coordinate
+                  \^ [x (inc y)]
+                     ;; South, decrement y coordinate
+                  \v [x (dec y)])]
+        (recur
+         (update prezzies nextloc (fn [val] (if (nil? val) 1 (inc val))))
+         (assoc locations robosanta nextloc)
+         (not robosanta)
+         (next input)))
+      ;; We have no more input, return number of coordinates where households
+      ;; were given multiple gift deliveries
+      prezzies)))
+
 (defn star1 [input]
   (count (bob input)))
 
 (defn star2 [input]
-	input)
+  (count (bob2 input)))
