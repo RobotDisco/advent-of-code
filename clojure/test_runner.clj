@@ -10,10 +10,12 @@
 
 (require 'aoc.year2015.day01-test)
 (require 'aoc.year2015.day02-test)
+(require 'aoc.year2015.day03-test)
 
 (def test-results
   (t/run-tests 'aoc.year2015.day01-test
-               'aoc.year2015.day02-test))
+               'aoc.year2015.day02-test
+               'aoc.year2015.day03-test))
 
 (let [{:keys [fail error]} test-results]
   (when (pos? (+ fail error))
