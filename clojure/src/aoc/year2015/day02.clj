@@ -1,5 +1,6 @@
 (ns aoc.year2015.day02
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clojure.test :refer [with-test is]]))
 
 (defn parse-dimensions
   "Convert a string of the format AxBxC into a 3-tuple of integers.
@@ -73,20 +74,21 @@
 ;;; Is this a pattern many of our stars will follow?
 ;;; Keep an eye for that in the future to see if we need
 ;;; a function or macro for this.
-(defn star1
-  "Solution for Advent of Code Year 2015, Day 2, Star 1"
-  [input]
+(with-test
+  (defn star1
+    "Solution for Advent of Code Year 2015, Day 2, Star 1"
+    [input]
   ;; Take the input string we fetch from adventofcode.com
-  (->> input
+    (->> input
        ;; Split it into lines (each line will be an item unto itself)
-       str/split-lines
+         str/split-lines
        ;; Decipher the line based on the question-specific domain specific
        ;; language and make sequence of data that is useful
-       (map parse-dimensions)
+         (map parse-dimensions)
        ;; Produce an answer from our processed data.
-       (map total-paper)
+         (map total-paper)
        ;; Reduce sequence of computed subanswers into the total sum
-       (apply +)
+         (apply +)
        ;;
        ;; This is probably fine to do in a thread, as this wouldn't be a huge
        ;; amount of data, and it's better to be readable until I'm fluent in
@@ -94,28 +96,34 @@
        ;;
        ;; If this becomes a pattern I keep using, I will consider making a macro
        ;; out of this flow.
-       ))
+         ))
 
+  (is (= 58 (star1 "2x3x4")))
+  (is (= 43 (star1 "1x1x10"))))
 
-(defn star2
-  "Solution for Advent of Code Year 2015, Day 2, Star 2"
-  [input]
-  ;; Take the input string we fetch from adventofcode.com
-  (->> input
-  ;; Split it into lines (each line will be an item unto itself)
-       str/split-lines
-       ;; Decipher the line based on the question-specific domain specific
-       ;; language and make sequence of data that is useful
-       (map parse-dimensions)
-       ;; Produce an answer from our processed data.
-       (map ribbon-length)
-       ;; Reduce sequence of computed subanswers into the total sum
-       (apply +)
-       ;;
-       ;; This is probably fine to do in a thread, as this wouldn't be a huge
-       ;; amount of data, and it's better to be readable until I'm fluent in
-       ;; Clojure.
-       ;;
-       ;; If this becomes a pattern I keep using, I will consider making a macro
-       ;; out of this flow.
-       ))
+(with-test
+  (defn star2
+    "Solution for Advent of Code Year 2015, Day 2, Star 2"
+    [input]
+    ;; Take the input string we fetch from adventofcode.com
+    (->> input
+         ;; Split it into lines (each line will be an item unto itself)
+         str/split-lines
+         ;; Decipher the line based on the question-specific domain specific
+         ;; language and make sequence of data that is useful
+         (map parse-dimensions)
+         ;; Produce an answer from our processed data.
+         (map ribbon-length)
+         ;; Reduce sequence of computed subanswers into the total sum
+         (apply +)
+         ;;
+         ;; This is probably fine to do in a thread, as this wouldn't be a huge
+         ;; amount of data, and it's better to be readable until I'm fluent in
+         ;; Clojure.
+         ;;
+         ;; If this becomes a pattern I keep using, I will consider making a macro
+         ;; out of this flow.
+         ))
+
+  (is (= 34 (star2 "2x3x4")))
+  (is (= 14 (star2 "1x1x10"))))

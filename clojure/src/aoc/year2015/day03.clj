@@ -1,7 +1,8 @@
 ;;;; Solution for Advent of CodeYear 2015 Day 03.
 ;;;; See question and examples at https://adventofcode.com/2015/day/3.
 ;;;; See your specific input at https://adventofcode.com/2015/day/$d/input
-(ns aoc.year2015.day03)
+(ns aoc.year2015.day03
+  (:require [clojure.test :refer [with-test is]]))
 
 (defn move-location
   "Based on the cardinal direction represented by the character in `direction`,
@@ -54,19 +55,29 @@
       ;; were given multiple gift deliveries
       prezzies)))
 
-(defn star1 [input]
-  (count (deliver-gifts input
+(with-test
+  (defn star1 [input]
+    (count (deliver-gifts input
                         ;; There's only a single sleigh.
-                        {true [0 0]}
-                        true
+                          {true [0 0]}
+                          true
                         ;; Constantly return the same cursor
-                        (fn [_cur] true))))
+                          (fn [_cur] true))))
 
-(defn star2 [input]
-  (count (deliver-gifts input
+  (is (= 2 (star1 ">")))
+  (is (= 4 (star1 "^>v<")))
+  (is (= 2 (star1 "^v^v^v^v^v"))))
+
+(with-test
+  (defn star2 [input]
+    (count (deliver-gifts input
                         ;; There is Santa's sleigh and RoboSanta's sleigh
-                        {true [0 0] false [0 0]}
+                          {true [0 0] false [0 0]}
                         ;; Move Santa first
-                        true
+                          true
                         ;; A boolean allows us to easily flip between the two sleighs
-                        (fn [cur] (not cur)))))
+                          (fn [cur] (not cur)))))
+
+  (is (= 3 (star2 "^v")))
+  (is (= 3 (star2 "^>v<")))
+  (is (= 11 (star2 "^v^v^v^v^v"))))
