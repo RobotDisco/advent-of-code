@@ -11,11 +11,13 @@
 (require 'aoc.year2015.day01)
 (require 'aoc.year2015.day02)
 (require 'aoc.year2015.day03)
+(require 'aoc.year2015.day04)
 
 (def test-results
   (t/run-tests 'aoc.year2015.day01
                'aoc.year2015.day02
-               'aoc.year2015.day03))
+               'aoc.year2015.day03
+               'aoc.year2015.day04))
 
 (let [{:keys [fail error]} test-results]
   (when (pos? (+ fail error))
