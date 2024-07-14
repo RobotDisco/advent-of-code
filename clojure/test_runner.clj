@@ -33,9 +33,14 @@
     (symbol $)))
 
 (def namespaces
+  ;; Glob, shell-like file expansion, find all .clj files in all subdirectories
+  ;; under src/
   (->> (fs/glob "src" "**/*.clj")
        (mapv file->ns)))
 
+;; Now that we have our list of namespace symbols,
+;; we need to explicitly load them before we can reference them
+;; via the test runner.
 (apply require namespaces)
 
 (def test-results
