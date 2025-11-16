@@ -37,6 +37,6 @@ AOC2015Day01Test >> testStar2 [
 	Example ')' reaches the basement after step 1
 	Example '()())' reaches the basement after step 5"
 
-		self assert: (AOC2015Day01 star2WithInput: ')') equals: 1.
-		self assert: (AOC2015Day01 star2WithInput: '()())') equals: 5
+	self assert: (AOC2015Day01 star2WithInput: ')') equals: 1.
+	self assert: (AOC2015Day01 star2WithInput: '()())') equals: 5
 ]
