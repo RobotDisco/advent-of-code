@@ -15,7 +15,7 @@ See the test class `AOC2015Day01Test` for examples.
 "
 Class {
 	#name : #AOC2015Day01,
-	#superclass : #Object,
+	#superclass : #AOC2015Day,
 	#classVars : [
 		'INPUT'
 	],

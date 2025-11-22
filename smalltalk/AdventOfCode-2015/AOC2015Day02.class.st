@@ -11,7 +11,7 @@ Examples:
 "
 Class {
 	#name : #AOC2015Day02,
-	#superclass : #Object,
+	#superclass : #AOC2015Day,
 	#classVars : [
 		'INPUT',
 		'REGEX'
