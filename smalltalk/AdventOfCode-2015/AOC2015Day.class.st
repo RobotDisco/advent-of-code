@@ -36,13 +36,13 @@ AOC2015Day class >> createDay: dayNumber [
 		package: 'AdventOfCode-2015-Solutions'.
 
 	"Create test class"
-	self
+	TestCase
 		subclass: testClassName
 		instanceVariableNames: ''
 		classVariableNames: ''
 		package: 'AdventOfCode-2015-Tests-Solutions'.
 
-	class := Smalltalk at: className.
+	class := (Smalltalk at: className) class.
 	class
 		compile: 'star1
 		self flag: #notYetImplemented'
