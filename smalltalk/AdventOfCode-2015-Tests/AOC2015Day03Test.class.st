@@ -1,3 +1,6 @@
+"
+This class contains tests for `AOC2015Day03`
+"
 Class {
 	#name : #AOC2015Day03Test,
 	#superclass : #TestCase,

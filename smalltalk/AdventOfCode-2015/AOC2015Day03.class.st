@@ -1,3 +1,6 @@
+"
+Solution for Advent of Code 2015, Day 03
+"
 Class {
 	#name : #AOC2015Day03,
 	#superclass : #AOC2015Day,
@@ -22,28 +25,32 @@ AOC2015Day03 class >> star1 [
 { #category : #stars }
 AOC2015Day03 class >> star1WithInput: input [
 
-	| x y actions houses |
-	x := 0.
-	y := 0.
+"Santa is delivering presents to an infinite two-dimensional grid of houses.
+
+He begins by delivering a present to the house at his starting location, and then an elf at the North Pole calls him via radio and tells him where to move next. Moves are always exactly one house to the north (^), south (v), east (>), or west (<). After each move, he delivers another present to the house at his new location.
+
+However, the elf back at the north pole has had a little too much eggnog, and so his directions are a little off, and Santa ends up visiting some houses more than once. How many houses receive at least one present?
+
+For example:
+
+> delivers presents to 2 houses: one at the starting location, and one to the east.
+^>v< delivers presents to 4 houses in a square, including twice to the house at his starting/ending location.
+^v^v^v^v^v delivers a bunch of presents to some very lucky children at only 2 houses."
+
+	| santa houses |
+	santa := AOC2015Day03Sleigh new.
 
 	houses := Dictionary newFromPairs: { 
-			          x.
-			          (Dictionary newFromPairs: { 
-					           y.
-					           1 }) }.
-	actions := Dictionary new
-		           at: $^ put: [ y := y + 1 ];
-		           at: $v put: [ y := y - 1 ];
-		           at: $< put: [ x := x - 1 ];
-		           at: $> put: [ x := x + 1 ];
-		           yourself.
+			          (Point x: 0 y: 0).
+			          1 }.
 
-	input keysAndValuesDo: [ :index :char | 
-		(actions at: char) value value.
-		houses at: x at: y put: (houses at: x at: y ifAbsentPut: [ 0 ]) + 1 ].
+	input keysAndValuesDo: [ :_ :char | 
+		santa followDirection: char.
+		houses
+			at: santa asPoint
+			put: (houses at: santa asPoint ifAbsentPut: [ 0 ]) + 1 ].
 
-	^ houses inject: 0 into: [ :sum1 :subArray | 
-		  sum1 + (subArray count: [ :_ | true ])]
+	^ houses size
 ]
 
 { #category : #stars }
@@ -55,46 +62,40 @@ AOC2015Day03 class >> star2 [
 { #category : #stars }
 AOC2015Day03 class >> star2WithInput: input [
 
-	| santaInput roboInput santax santay robox roboy santaActions roboActions houses |
+"The next year, to speed up the process, Santa creates a robot version of himself, Robo-Santa, to deliver presents with him.
+
+Santa and Robo-Santa start at the same location (delivering two presents to the same starting house), then take turns moving based on instructions from the elf, who is eggnoggedly reading from the same script as the previous year.
+
+This year, how many houses receive at least one present?
+
+For example:
+
+^v delivers presents to 3 houses, because Santa goes north, and then Robo-Santa goes south.
+^>v< now delivers presents to 3 houses, and Santa and Robo-Santa end up back where they started.
+^v^v^v^v^v now delivers presents to 11 houses, with Santa going one direction and Robo-Santa going the other."
+
+	| santaInput roboInput santa robo houses |
 	santaInput := input selectEveryFirst.
 	roboInput := input selectEverySecond.
 
-	santax := 0.
-	santay := 0.
-	robox := 0.
-	roboy := 0.
+	santa := AOC2015Day03Sleigh new.
+	robo := AOC2015Day03Sleigh new.
 
 	houses := Dictionary newFromPairs: { 
-			          0.
-			          (Dictionary newFromPairs: { 0. 2 }) }.
+			          (Point x: 0 y: 0).
+			          2 }.
 
-	santaActions := Dictionary new
-		                at: $^ put: [ santay := santay + 1 ];
-		                at: $v put: [ santay := santay - 1 ];
-		                at: $< put: [ santax := santax - 1 ];
-		                at: $> put: [ santax := santax + 1 ];
-		                yourself.
-	roboActions := Dictionary new
-		               at: $^ put: [ roboy := roboy + 1 ];
-		               at: $v put: [ roboy := roboy - 1 ];
-		               at: $< put: [ robox := robox - 1 ];
-		               at: $> put: [ robox := robox + 1 ];
-		               yourself.
-
-	santaInput keysAndValuesDo: [ :index :char | 
-		(santaActions at: char) value value.
+	santaInput keysAndValuesDo: [ :_ :char | 
+		santa followDirection: char.
 		houses
-			at: santax
-			at: santay
-			put: (houses at: santax at: santay ifAbsentPut: [ 0 ]) + 1 ].
-	roboInput keysAndValuesDo: [ :index :char | 
-		(roboActions at: char) value value.
-		houses
-			at: robox
-			at: roboy
-			put: (houses at: robox at: roboy ifAbsentPut: [ 0 ]) + 1 ].
+			at: santa asPoint
+			put: (houses at: santa asPoint ifAbsentPut: [ 0 ]) + 1 ].
 
-	^ houses
-		  inject: 0
-		  into: [ :sum1 :subArray | sum1 + (subArray count: [ :_ | true ]) ]
+	roboInput keysAndValuesDo: [ :_ :char | 
+		robo followDirection: char.
+		houses
+			at: robo asPoint
+			put: (houses at: robo asPoint ifAbsentPut: [ 0 ]) + 1 ].
+
+	^ houses size
 ]
