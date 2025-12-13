@@ -34,6 +34,15 @@ AOC2015Day class >> createDay: dayNumber [
 		          instanceVariableNames: ''
 		          classVariableNames: 'INPUT'
 		          package: 'AdventOfCode-2015-Solutions') class.
+	class comment: ('Solution for [Advent of Code 2015, Day ', dayNumber asString, '](https://adventofcode.com/2015/day/', dayNumber asString, ')
+
+See `star1WithInput:` and `star2WithInput:` for the exercise definitions.
+
+Public API:
+•	`star1withInput:` - Compute star 1 with provided input.
+•	`star2withInput:` - Compute star 2 with provided input.
+•	`star1` - Compute star1 with website-provided evaluation input.
+•	`star2` - Compute star2 with website-provided evaluation input.').
 
 	"Create test class"
 	testClass := (TestCase
@@ -42,10 +51,11 @@ AOC2015Day class >> createDay: dayNumber [
 		              classVariableNames: ''
 		              package: 'AdventOfCode-2015-Tests-Solutions') class.
 
-	class compile: 'initialize
+	class
+		compile: 'initialize
 	
 	    INPUT := '''' "Official submission input."'
-	    classified: 'class initialization'. 
+		classified: 'class initialization'.
 
 	class
 		compile: 'star1
