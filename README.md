@@ -9,4 +9,4 @@ Common Lisp especially in my untalented hands looks beautifully viscious.
 
 I didn't see any admonishments about putting code online, but I need backups and I see others have put their code up. My code is mirthfully carefree common lisp so you should probably find someone else to cheat from.
 
-Released under the UnLicense
+Released under the [0BSD license](https://choosealicense.com/licenses/0bsd/).
