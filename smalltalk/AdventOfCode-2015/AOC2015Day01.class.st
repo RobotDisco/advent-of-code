@@ -1,17 +1,13 @@
 "
 Solution for [Advent of Code 2015, Day 1](https://adventofcode.com/2015/day/1)
 
-We are given an input string which instructs Santa to go up one flight of stairs, or down one flight of stairs.
-
-We store our AOC-supplied input string in the class variable INPUT.
+See `star1WithInput:` and `star2WithInput:` for the exercise definitions.
 
 Public API:
-- star1withInput: - Compute what floor Santa is on, given input string
-- star2withInput: - Determine how many steps it takes Santa to enter the basement, given input string
-- star1 - Compute what floor Santa is on, using string `INPUT`
-- star2 - etermine how many steps it takes Santa to enter the basement, using string INPUT
-
-See the test class `AOC2015Day01Test` for examples.
+•	`star1withInput:` - Compute star 1 with provided input.
+•	`star2withInput:` - Compute star 2 with provided input.
+•	`star1` - Compute star1 with website-provided evaluation input.
+•	`star2` - Compute star2 with website-provided evaluation input.
 "
 Class {
 	#name : #AOC2015Day01,

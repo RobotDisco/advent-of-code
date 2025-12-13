@@ -1,13 +1,13 @@
 "
 Solution for [Advent of Code 2015, Day 2](https://adventofcode.com/2015/day/2)
 
-Calculate amount of wrapping paper (for star 1) and ribbon (for star 2) required for a list of box dimensions.
+See `star1WithInput:` and `star2WithInput:` for the exercise definitions.
 
-Input format: newline-delimited dimension strings consisting of length, height and width integers separated by an 'x' character. For example, ""1x2x3"" or ""40x50x60"". 
-
-Examples:
-- `AOC2015Day01 star1`: Solve for star 1 with the input that Advent of Code will score. 
-- `AOC2015Day02 star2WithInput: '1x2x3'`: Solve for star 2 with a provided custom input.
+Public API:
+•	`star1withInput:` - Compute star 1 with provided input.
+•	`star2withInput:` - Compute star 2 with provided input.
+•	`star1` - Compute star1 with website-provided evaluation input.
+•	`star2` - Compute star2 with website-provided evaluation input.
 "
 Class {
 	#name : #AOC2015Day02,

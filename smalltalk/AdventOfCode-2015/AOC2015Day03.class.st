@@ -1,5 +1,13 @@
 "
-Solution for Advent of Code 2015, Day 03
+Solution for [Advent of Code 2015, Day 3](https://adventofcode.com/2015/day/3)
+
+See `star1WithInput:` and `star2WithInput:` for the exercise definitions.
+
+Public API:
+•	`star1withInput:` - Compute star 1 with provided input.
+•	`star2withInput:` - Compute star 2 with provided input.
+•	`star1` - Compute star1 with website-provided evaluation input.
+•	`star2` - Compute star2 with website-provided evaluation input.
 "
 Class {
 	#name : #AOC2015Day03,
